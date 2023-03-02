@@ -91,7 +91,7 @@ const post = ref({
 
 //computed 
 const islocationSupported = computed(()=>{
-  'geolocation' in navigator ? true : false;
+ return  'geolocation' in navigator ? true : false;
 })
 
 //methods
