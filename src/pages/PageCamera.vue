@@ -70,6 +70,7 @@ import { defineComponent, ref, onMounted, onBeforeUnmount, computed } from "vue"
 import { uid } from "quasar";
 import "md-gum-polyfill";
 import axios from "axios";
+import { useQuasar } from 'quasar'
 import { nodeVersions } from "browserslist";
 import { parserOptions } from "@vue/compiler-dom";
 
@@ -80,6 +81,7 @@ const imageCaptured = ref(false);
 const hasCameraSupport = ref(true);
 const imageUpload = ref([]);
 const locationLoading = ref(false);
+const $q = useQuasar()
 const post = ref({
   id: uid(),
   caption: "",
