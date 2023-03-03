@@ -10,7 +10,7 @@
 
 
 const { configure } = require('quasar/wrappers');
-
+let API_LOCAL= "http://localhost:3000", API_PRODUCTION= "https://quasagram.onrender.com";
 
 module.exports = configure(function (/* ctx */) {
   return {
@@ -62,7 +62,9 @@ module.exports = configure(function (/* ctx */) {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        API : API_PRODUCTION // API_LOCAL || API_PRODUCTION
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
@@ -99,7 +101,7 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Dialog']
+      plugins: ['Dialog','Notify','Loading']
     },
 
     // animations: 'all', // --- includes all animations

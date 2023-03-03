@@ -3,7 +3,7 @@
     <div class="row q-col-gutter-lg">
       <div class="col-12 col-sm-8">
         <template v-if="!isPostLoading && posts.length">
-             <q-card
+          <q-card
             class="card-post q-mb-md"
             flat
             bordered
@@ -38,7 +38,7 @@
           <h5 class="text-center text-grey">No Posts.</h5>
         </template>
         <template v-else>
-           <q-card flat bordered>
+      <q-card flat bordered>
         <q-item>
           <q-item-section avatar>
             <q-skeleton type="QAvatar" animation="fade"  size="40px" />
@@ -97,7 +97,7 @@ const isPostLoading = ref(false)
 const getPosts =  () => {
   isPostLoading.value = true
    axios
-    .get("https://quasagram.onrender.com/posts").then(response => {
+    .get(`${process.env.API}/posts`).then(response => {
         posts.value = response.data;
         isPostLoading.value = false;
     }).catch(error => {

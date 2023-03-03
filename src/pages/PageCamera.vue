@@ -15,6 +15,7 @@
     </div>
     <div class="text-center q-pa-md">
       <q-btn
+        :disable="imageCaptured"
         v-if="hasCameraSupport"
         round
         color="grey-10"
@@ -37,7 +38,7 @@
       </q-file>
     </div>
     <div class="row justify-center q-ma-md">
-      <q-input label="Caption" class="col col-sm-6" dense />
+      <q-input label="Caption *" class="col col-sm-6" dense v-model="post.caption" />
     </div>
     <div class="row justify-center q-ma-md">
       <q-input
@@ -60,7 +61,7 @@
       </q-input>
     </div>
     <div class="row justify-center q-mt-lg">
-      <q-btn unelevated rounded color="grey-10" label="Post Image" />
+      <q-btn unelevated rounded color="grey-10" label="Post Image" @click="createPost()" :disable="!post.caption || !post.photo" />
     </div>
   </q-page>
 </template>
@@ -71,8 +72,7 @@ import { uid } from "quasar";
 import "md-gum-polyfill";
 import axios from "axios";
 import { useQuasar } from 'quasar'
-import { nodeVersions } from "browserslist";
-import { parserOptions } from "@vue/compiler-dom";
+import { useRouter, useRoute } from 'vue-router'
 
 //data
 const videoRef = ref();
@@ -82,6 +82,8 @@ const hasCameraSupport = ref(true);
 const imageUpload = ref([]);
 const locationLoading = ref(false);
 const $q = useQuasar()
+const router = useRouter()
+
 const post = ref({
   id: uid(),
   caption: "",
@@ -219,6 +221,34 @@ const locationError = () => {
   });
   locationLoading.value = false;
 };
+
+const createPost = () =>{
+
+  $q.loading.show()
+  let formdata = new FormData();
+  formdata.append('id', post.value.id)
+  formdata.append('caption', post.value.caption)
+  formdata.append('location', post.value.location)
+  formdata.append('date', post.value.date)
+  formdata.append('file', post.value.photo, post.value.id + '.png')
+
+  axios.post(`${process.env.API}/createPost`, formdata).then((Response)=>{
+      router.push("/");
+      $q.notify({
+      message: 'Post created!',
+      actions: [
+        { label: 'Dismiss', color: 'white' }
+      ]
+    })
+    $q.loading.hide()
+  }).catch((error)=>{
+      $q.dialog({
+      title: "Error",
+      message: "Could not create post.",
+    });
+    $q.loading.hide()
+  })
+}
 
 //hooks
 onMounted(() => {
